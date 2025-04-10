@@ -22,7 +22,7 @@ for motor in wheel_motors.values():
     motor.setVelocity(0.0)
 
 # Movement parameters
-max_wheel_velocity = 5.0  # rad/s (adjust based on testing)
+max_wheel_velocity = 100.0  # rad/s (adjust based on testing)
 
 def process_keyboard():
     """Process keyboard input and return movement commands"""

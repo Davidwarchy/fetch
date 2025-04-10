@@ -1,19 +1,18 @@
 #VRML_SIM R2025a utf8
 # license: Apache License 2.0
 # license url: http://www.apache.org/licenses/LICENSE-2.0
-# This is a proto file for Webots for the fetch
-# Extracted from: C:\Users\HP\Desktop\manual-anymal\fetch_description\robots\fetch.urdf
+# This is a simplified proto file for Webots for the fetch robot
 
 PROTO fetch [
   field  SFVec3f     translation     0 0 0
   field  SFRotation  rotation        0 0 1 0
-  field  SFString    name            "fetch"  # Is `Robot.name`.
-  field  SFString    controller      "void"   # Is `Robot.controller`.
-  field  MFString    controllerArgs  []       # Is `Robot.controllerArgs`.
-  field  SFString    customData      ""       # Is `Robot.customData`.
-  field  SFBool      supervisor      FALSE    # Is `Robot.supervisor`.
-  field  SFBool      synchronization TRUE     # Is `Robot.synchronization`.
-  field  SFBool      selfCollision   FALSE    # Is `Robot.selfCollision`.
+  field  SFString    name            "fetch"  
+  field  SFString    controller      "void"   
+  field  MFString    controllerArgs  []       
+  field  SFString    customData      ""       
+  field  SFBool      supervisor      FALSE    
+  field  SFBool      synchronization TRUE     
+  field  SFBool      selfCollision   FALSE    
 ]
 {
   Robot {
@@ -26,100 +25,112 @@ PROTO fetch [
     synchronization IS synchronization
     selfCollision IS selfCollision
     children [
-      DEF base_link_visual CadShape {
-        url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/base_link.dae"
+      # Simplified base inspired by RbtWhse from .wbt file
+      DEF base_link Pose {
+        translation 0 0 0.05
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.086000 0.506000 0.767000  # Matching original wheel color for consistency
+              roughness 1
+              metalness 0
+            }
+            geometry Box {
+              size 0.4 0.4 0.1  # Slightly larger than RbtWhse body to suit Fetch
+            }
+          }
+        ]
       }
+      # Right wheel (simplified from .wbt)
       HingeJoint {
         jointParameters HingeJointParameters {
-          axis 0.000000 1.000000 0.000000
-          anchor 0.001291 -0.187380 0.055325
+          axis 0 1 0
+          anchor 0.15 -0.25 0.025
         }
         device [
           RotationalMotor {
             name "r_wheel_joint"
-            maxVelocity 17.4
-            maxTorque 8.85
+            maxVelocity 100
+            maxTorque 100
           }
           PositionSensor {
             name "r_wheel_joint_sensor"
           }
         ]
         endPoint Solid {
-          translation 0.001291 -0.187380 0.055325
+          translation 0.15 -0.25 0.025
+          rotation 1 0 0 1.5708
           children [
             Shape {
-              appearance DEF r_wheel_link_material PBRAppearance {
-                baseColor 0.086000 0.506000 0.767000
-                roughness 1.000000
+              appearance PBRAppearance {
+                baseColor 0.2 0.2 0.2
+                roughness 1
                 metalness 0
               }
-              geometry DEF r_wheel_link Mesh {
-                url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/r_wheel_link.STL"
+              geometry Cylinder {
+                height 0.05
+                radius 0.075
               }
             }
           ]
           name "r_wheel_link"
-          boundingObject DEF r_wheel_link_collision Mesh {
-            url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/r_wheel_link_collision.STL"
+          boundingObject Cylinder {
+            height 0.05
+            radius 0.075
           }
           physics Physics {
             density -1
             mass 4.354200
-            centerOfMass [ 0.000000 0.000000 0.000000 ]
-            inertiaMatrix [
-              4.500000e-03 5.000000e-03 4.500000e-03
-              0.000000e+00 0.000000e+00 0.000000e+00
-            ]
           }
         }
       }
+      # Left wheel (simplified from .wbt)
       HingeJoint {
         jointParameters HingeJointParameters {
-          axis 0.000000 1.000000 0.000000
-          anchor 0.001291 0.187380 0.055325
+          axis 0 1 0
+          anchor 0.15 0.25 0.025
         }
         device [
           RotationalMotor {
             name "l_wheel_joint"
-            maxVelocity 17.4
-            maxTorque 8.85
+            maxVelocity 100
+            maxTorque 100
           }
           PositionSensor {
             name "l_wheel_joint_sensor"
           }
         ]
         endPoint Solid {
-          translation 0.001291 0.187380 0.055325
+          translation 0.15 0.25 0.025
+          rotation 1 0 0 1.5708
           children [
             Shape {
-              appearance DEF l_wheel_link_material PBRAppearance {
-                baseColor 0.086000 0.506000 0.767000
-                roughness 1.000000
+              appearance PBRAppearance {
+                baseColor 0.2 0.2 0.2
+                roughness 1
                 metalness 0
               }
-              geometry DEF l_wheel_link Mesh {
-                url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/l_wheel_link.STL"
+              geometry Cylinder {
+                height 0.05
+                radius 0.075
               }
             }
           ]
           name "l_wheel_link"
-          boundingObject DEF l_wheel_link_collision Mesh {
-            url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/l_wheel_link_collision.STL"
+          boundingObject Cylinder {
+            height 0.05
+            radius 0.075
           }
           physics Physics {
             density -1
             mass 4.354200
-            centerOfMass [ 0.000000 0.000000 0.000000 ]
-            inertiaMatrix [
-              4.500000e-03 5.000000e-03 4.500000e-03
-              0.000000e+00 0.000000e+00 0.000000e+00
-            ]
           }
         }
       }
+      # Torso and upper structure (unchanged from original PROTO)
       SliderJoint {
         jointParameters JointParameters {
-          axis 0.000000 0.000000 1.000000
+          axis 0 0 1
           dampingConstant 100.0
         }
         device [
@@ -134,15 +145,15 @@ PROTO fetch [
           }
         ]
         endPoint Solid {
-          translation -0.086875 0.000000 0.377430
+          translation -0.086875 0 0.377430
           children [
             DEF torso_lift_link_visual CadShape {
               url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/torso_lift_link.dae"
             }
             HingeJoint {
               jointParameters HingeJointParameters {
-                axis 0.000000 0.000000 1.000000
-                anchor 0.053125 0.000000 0.603001
+                axis 0 0 1
+                anchor 0.053125 0 0.603001
               }
               device [
                 RotationalMotor {
@@ -157,15 +168,15 @@ PROTO fetch [
                 }
               ]
               endPoint Solid {
-                translation 0.053125 0.000000 0.603001
+                translation 0.053125 0 0.603001
                 children [
                   DEF head_pan_link_visual CadShape {
                     url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/head_pan_link.dae"
                   }
                   HingeJoint {
                     jointParameters HingeJointParameters {
-                      axis 0.000000 1.000000 0.000000
-                      anchor 0.142530 0.000000 0.057999
+                      axis 0 1 0
+                      anchor 0.142530 0 0.057999
                     }
                     device [
                       RotationalMotor {
@@ -180,47 +191,37 @@ PROTO fetch [
                       }
                     ]
                     endPoint Solid {
-                      translation 0.142530 0.000000 0.057999
+                      translation 0.142530 0 0.057999
                       children [
                         DEF head_tilt_link_visual CadShape {
                           url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/head_tilt_link.dae"
                         }
                       ]
                       name "head_tilt_link"
-                      boundingObject DEF head_tilt_link_collision Mesh {
-                        url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/head_tilt_link_collision.STL"
+                      boundingObject Box {
+                        size 0.15 0.15 0.2
                       }
                       physics Physics {
                         density -1
                         mass 0.908700
-                        centerOfMass [ 0.008100 0.002500 0.011300 ]
-                        inertiaMatrix [
-                          6.100000e-03 1.400000e-03 6.100000e-03
-                          -0.000000e+00 2.000000e-04 -1.000000e-04
-                        ]
                       }
                     }
                   }
                 ]
                 name "head_pan_link"
-                boundingObject DEF head_pan_link_collision Mesh {
-                  url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/head_pan_link_collision.STL"
+                boundingObject Box {
+                  size 0.2 0.2 0.3
                 }
                 physics Physics {
                   density -1
                   mass 2.255600
-                  centerOfMass [ 0.032100 0.016100 0.039000 ]
-                  inertiaMatrix [
-                    1.290000e-02 9.500000e-03 1.840000e-02
-                    2.000000e-04 7.000000e-04 -0.000000e+00
-                  ]
                 }
               }
             }
             HingeJoint {
               jointParameters HingeJointParameters {
-                axis 0.000000 0.000000 1.000000
-                anchor 0.119525 0.000000 0.348580
+                axis 0 0 1
+                anchor 0.119525 0 0.348580
                 dampingConstant 1.0
               }
               device [
@@ -236,15 +237,15 @@ PROTO fetch [
                 }
               ]
               endPoint Solid {
-                translation 0.119525 0.000000 0.348580
+                translation 0.119525 0 0.348580
                 children [
                   DEF shoulder_pan_link_visual CadShape {
                     url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/shoulder_pan_link.dae"
                   }
                   HingeJoint {
                     jointParameters HingeJointParameters {
-                      axis 0.000000 1.000000 0.000000
-                      anchor 0.117000 0.000000 0.060000
+                      axis 0 1 0
+                      anchor 0.117000 0 0.060000
                       dampingConstant 1.0
                     }
                     device [
@@ -260,14 +261,14 @@ PROTO fetch [
                       }
                     ]
                     endPoint Solid {
-                      translation 0.117000 0.000000 0.060000
+                      translation 0.117000 0 0.060000
                       children [
                         DEF shoulder_lift_link_visual CadShape {
                           url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/shoulder_lift_link.dae"
                         }
                         HingeJoint {
                           jointParameters HingeJointParameters {
-                            anchor 0.219000 0.000000 0.000000
+                            anchor 0.219000 0 0
                             dampingConstant 5.0
                           }
                           device [
@@ -283,15 +284,15 @@ PROTO fetch [
                             }
                           ]
                           endPoint Solid {
-                            translation 0.219000 0.000000 0.000000
+                            translation 0.219000 0 0
                             children [
                               DEF upperarm_roll_link_visual CadShape {
                                 url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/upperarm_roll_link.dae"
                               }
                               HingeJoint {
                                 jointParameters HingeJointParameters {
-                                  axis 0.000000 1.000000 0.000000
-                                  anchor 0.133000 0.000000 0.000000
+                                  axis 0 1 0
+                                  anchor 0.133000 0 0
                                   dampingConstant 1.0
                                 }
                                 device [
@@ -307,14 +308,14 @@ PROTO fetch [
                                   }
                                 ]
                                 endPoint Solid {
-                                  translation 0.133000 0.000000 0.000000
+                                  translation 0.133000 0 0
                                   children [
                                     DEF elbow_flex_link_visual CadShape {
                                       url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/elbow_flex_link.dae"
                                     }
                                     HingeJoint {
                                       jointParameters HingeJointParameters {
-                                        anchor 0.197000 0.000000 0.000000
+                                        anchor 0.197000 0 0
                                         dampingConstant 5.0
                                       }
                                       device [
@@ -330,15 +331,15 @@ PROTO fetch [
                                         }
                                       ]
                                       endPoint Solid {
-                                        translation 0.197000 0.000000 0.000000
+                                        translation 0.197000 0 0
                                         children [
                                           DEF forearm_roll_link_visual CadShape {
                                             url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/forearm_roll_link.dae"
                                           }
                                           HingeJoint {
                                             jointParameters HingeJointParameters {
-                                              axis 0.000000 1.000000 0.000000
-                                              anchor 0.124500 0.000000 0.000000
+                                              axis 0 1 0
+                                              anchor 0.124500 0 0
                                               dampingConstant 1.0
                                             }
                                             device [
@@ -354,14 +355,14 @@ PROTO fetch [
                                               }
                                             ]
                                             endPoint Solid {
-                                              translation 0.124500 0.000000 0.000000
+                                              translation 0.124500 0 0
                                               children [
                                                 DEF wrist_flex_link_visual CadShape {
                                                   url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/wrist_flex_link.dae"
                                                 }
                                                 HingeJoint {
                                                   jointParameters HingeJointParameters {
-                                                    anchor 0.138500 0.000000 0.000000
+                                                    anchor 0.138500 0 0
                                                     dampingConstant 5.0
                                                   }
                                                   device [
@@ -377,22 +378,22 @@ PROTO fetch [
                                                     }
                                                   ]
                                                   endPoint Solid {
-                                                    translation 0.138500 0.000000 0.000000
+                                                    translation 0.138500 0 0
                                                     children [
                                                       DEF wrist_roll_link_visual CadShape {
                                                         url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/wrist_roll_link.dae"
                                                       }
                                                       Solid {
-                                                        translation 0.052300 0.000000 0.000000
-                                                        rotation -1.000000 0.000000 0.000000 0.828700
+                                                        translation 0.052300 0 0
+                                                        rotation -1 0 0 0.828700
                                                         children [
                                                           Pose {
-                                                            rotation 0.000000 -1.000000 0.000000 1.570800
+                                                            rotation 0 -1 0 1.570800
                                                             children [
                                                               Shape {
-                                                                appearance DEF ati_link_material PBRAppearance {
-                                                                  baseColor 0.750000 0.750000 0.750000
-                                                                  roughness 1.000000
+                                                                appearance PBRAppearance {
+                                                                  baseColor 0.75 0.75 0.75
+                                                                  roughness 1
                                                                   metalness 0
                                                                 }
                                                                 geometry DEF ati_sensor Mesh {
@@ -402,14 +403,14 @@ PROTO fetch [
                                                             ]
                                                           }
                                                           Solid {
-                                                            translation 0.147450 0.000000 0.000000
+                                                            translation 0.147450 0 0
                                                             children [
                                                               DEF gripper_link_visual CadShape {
                                                                 url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/gripper_link.dae"
                                                               }
                                                               SliderJoint {
                                                                 jointParameters JointParameters {
-                                                                  axis 0.000000 1.000000 0.000000
+                                                                  axis 0 1 0
                                                                   dampingConstant 100.0
                                                                 }
                                                                 device [
@@ -424,16 +425,16 @@ PROTO fetch [
                                                                   }
                                                                 ]
                                                                 endPoint Solid {
-                                                                  translation 0.000000 0.015425 0.000000
+                                                                  translation 0 0.015425 0
                                                                   children [
                                                                     Pose {
-                                                                      translation -0.035000 -0.005000 0.000000
-                                                                      rotation 0.000000 1.000000 0.000000 1.570800
+                                                                      translation -0.035000 -0.005000 0
+                                                                      rotation 0 1 0 1.570800
                                                                       children [
                                                                         Shape {
-                                                                          appearance DEF r_gripper_finger_link_material PBRAppearance {
-                                                                            baseColor 0.356000 0.361000 0.376000
-                                                                            roughness 1.000000
+                                                                          appearance PBRAppearance {
+                                                                            baseColor 0.356 0.361 0.376
+                                                                            roughness 1
                                                                             metalness 0
                                                                           }
                                                                           geometry DEF r_finger Mesh {
@@ -444,17 +445,18 @@ PROTO fetch [
                                                                     }
                                                                   ]
                                                                   name "r_gripper_finger_link"
-                                                                  boundingObject USE r_finger
+                                                                  boundingObject Box {
+                                                                    size 0.05 0.02 0.02
+                                                                  }
                                                                   physics Physics {
                                                                     density -1
                                                                     mass 0.079800
-                                                                    centerOfMass [ -0.010000 0.000000 0.000000 ]
                                                                   }
                                                                 }
                                                               }
                                                               SliderJoint {
                                                                 jointParameters JointParameters {
-                                                                  axis 0.000000 -1.000000 0.000000
+                                                                  axis 0 -1 0
                                                                   dampingConstant 100.0
                                                                 }
                                                                 device [
@@ -469,16 +471,16 @@ PROTO fetch [
                                                                   }
                                                                 ]
                                                                 endPoint Solid {
-                                                                  translation 0.000000 -0.015425 0.000000
+                                                                  translation 0 -0.015425 0
                                                                   children [
                                                                     Pose {
-                                                                      translation -0.035000 0.005000 0.000000
-                                                                      rotation 0.000000 1.000000 0.000000 1.570800
+                                                                      translation -0.035000 0.005000 0
+                                                                      rotation 0 1 0 1.570800
                                                                       children [
                                                                         Shape {
-                                                                          appearance DEF l_gripper_finger_link_material PBRAppearance {
-                                                                            baseColor 0.356000 0.361000 0.376000
-                                                                            roughness 1.000000
+                                                                          appearance PBRAppearance {
+                                                                            baseColor 0.356 0.361 0.376
+                                                                            roughness 1
                                                                             metalness 0
                                                                           }
                                                                           geometry DEF l_finger Mesh {
@@ -489,27 +491,23 @@ PROTO fetch [
                                                                     }
                                                                   ]
                                                                   name "l_gripper_finger_link"
-                                                                  boundingObject USE l_finger
+                                                                  boundingObject Box {
+                                                                    size 0.05 0.02 0.02
+                                                                  }
                                                                   physics Physics {
                                                                     density -1
                                                                     mass 0.079800
-                                                                    centerOfMass [ -0.010000 0.000000 0.000000 ]
                                                                   }
                                                                 }
                                                               }
                                                             ]
                                                             name "gripper_link"
-                                                            boundingObject DEF gripper_link Mesh {
-                                                              url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/gripper_link.STL"
+                                                            boundingObject Box {
+                                                              size 0.15 0.1 0.05
                                                             }
                                                             physics Physics {
                                                               density -1
                                                               mass 1.517500
-                                                              centerOfMass [ -0.090000 -0.000100 -0.001700 ]
-                                                              inertiaMatrix [
-                                                                1.300000e-03 1.900000e-03 2.400000e-03
-                                                                -0.000000e+00 0.000000e+00 -0.000000e+00
-                                                              ]
                                                             }
                                                           }
                                                         ]
@@ -521,128 +519,88 @@ PROTO fetch [
                                                         physics Physics {
                                                           density -1
                                                           mass 0.255000
-                                                          centerOfMass [ 0.016650 0.000000 0.000000 ]
-                                                          inertiaMatrix [
-                                                            1.000000e-04 1.000000e-04 1.000000e-04
-                                                            0.000000e+00 0.000000e+00 0.000000e+00
-                                                          ]
                                                         }
                                                       }
                                                     ]
                                                     name "wrist_roll_link"
-                                                    boundingObject DEF wrist_roll_link_collision Mesh {
-                                                      url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/wrist_roll_link_collision.STL"
+                                                    boundingObject Box {
+                                                      size 0.15 0.1 0.1
                                                     }
                                                     physics Physics {
                                                       density -1
                                                       mass 0.135400
-                                                      centerOfMass [ 0.009500 0.000400 -0.000200 ]
-                                                      inertiaMatrix [
-                                                        1.000000e-04 1.000000e-04 1.000000e-04
-                                                        0.000000e+00 0.000000e+00 0.000000e+00
-                                                      ]
                                                     }
                                                   }
                                                 }
                                               ]
                                               name "wrist_flex_link"
-                                              boundingObject DEF wrist_flex_link_collision Mesh {
-                                                url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/wrist_flex_link_collision.STL"
+                                              boundingObject Box {
+                                                size 0.15 0.1 0.1
                                               }
                                               physics Physics {
                                                 density -1
                                                 mass 1.725000
-                                                centerOfMass [ 0.088200 0.000900 -0.000100 ]
-                                                inertiaMatrix [
-                                                  1.800000e-03 4.200000e-03 4.200000e-03
-                                                  -1.000000e-04 -0.000000e+00 0.000000e+00
-                                                ]
                                               }
                                             }
                                           }
                                         ]
                                         name "forearm_roll_link"
-                                        boundingObject DEF forearm_roll_link_collision Mesh {
-                                          url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/forearm_roll_link_collision.STL"
+                                        boundingObject Box {
+                                          size 0.2 0.1 0.1
                                         }
                                         physics Physics {
                                           density -1
                                           mass 1.656300
-                                          centerOfMass [ 0.109700 -0.026600 0.000000 ]
-                                          inertiaMatrix [
-                                            1.600000e-03 3.000000e-03 3.500000e-03
-                                            -3.000000e-04 0.000000e+00 -0.000000e+00
-                                          ]
                                         }
                                       }
                                     }
                                   ]
                                   name "elbow_flex_link"
-                                  boundingObject DEF elbow_flex_link_collision Mesh {
-                                    url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/elbow_flex_link_collision.STL"
+                                  boundingObject Box {
+                                    size 0.2 0.1 0.1
                                   }
                                   physics Physics {
                                     density -1
                                     mass 2.129900
-                                    centerOfMass [ 0.127900 0.007300 0.000000 ]
-                                    inertiaMatrix [
-                                      2.400000e-03 8.200000e-03 8.400000e-03
-                                      -1.600000e-03 0.000000e+00 -0.000000e+00
-                                    ]
                                   }
                                 }
                               }
                             ]
                             name "upperarm_roll_link"
-                            boundingObject DEF upperarm_roll_link_collision Mesh {
-                              url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/upperarm_roll_link_collision.STL"
+                            boundingObject Box {
+                              size 0.2 0.1 0.1
                             }
                             physics Physics {
                               density -1
                               mass 2.331100
-                              centerOfMass [ 0.116500 0.001400 0.000000 ]
-                              inertiaMatrix [
-                                1.900000e-03 4.500000e-03 4.700000e-03
-                                -1.000000e-04 0.000000e+00 0.000000e+00
-                              ]
                             }
                           }
                         }
                       ]
                       name "shoulder_lift_link"
-                      boundingObject DEF shoulder_lift_link_collision Mesh {
-                        url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/shoulder_lift_link_collision.STL"
+                      boundingObject Box {
+                        size 0.2 0.1 0.1
                       }
                       physics Physics {
                         density -1
                         mass 2.661500
-                        centerOfMass [ 0.143200 0.007200 -0.000100 ]
-                        inertiaMatrix [
-                          2.800000e-03 1.110000e-02 1.120000e-02
-                          -2.100000e-03 -0.000000e+00 -0.000000e+00
-                        ]
                       }
                     }
                   }
                 ]
                 name "shoulder_pan_link"
-                boundingObject DEF shoulder_pan_link_collision Mesh {
-                  url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/shoulder_pan_link_collision.STL"
+                boundingObject Box {
+                  size 0.2 0.1 0.1
                 }
                 physics Physics {
                   density -1
                   mass 2.558700
-                  centerOfMass [ 0.092700 -0.005600 0.056400 ]
-                  inertiaMatrix [
-                    4.300000e-03 8.700000e-03 8.700000e-03
-                    -1.000000e-04 1.000000e-03 -1.000000e-04
-                  ]
                 }
               }
             }
             SliderJoint {
               jointParameters JointParameters {
-                axis 0.000000 0.000000 -1.000000
+                axis 0 0 -1
               }
               device [
                 LinearMotor {
@@ -658,9 +616,9 @@ PROTO fetch [
               endPoint Solid {
                 children [
                   Shape {
-                    appearance DEF bellows_link_material PBRAppearance {
-                      baseColor 0.000000 0.000000 0.000000
-                      roughness 1.000000
+                    appearance PBRAppearance {
+                      baseColor 0 0 0
+                      roughness 1
                       metalness 0
                     }
                     geometry DEF bellows_link Mesh {
@@ -669,89 +627,72 @@ PROTO fetch [
                   }
                 ]
                 name "bellows_link"
-                boundingObject DEF bellows_link_collision Mesh {
-                  url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/bellows_link_collision.STL"
+                boundingObject Box {
+                  size 0.1 0.1 0.2
                 }
                 physics Physics {
                   density -1
                   mass 0.169374
-                  centerOfMass [ 0.019132 -0.000000 -0.134862 ]
-                  inertiaMatrix [
-                    3.311591e-03 1.744473e-03 1.694176e-03
-                    -8.923096e-18 -5.386222e-08 -8.069650e-17
-                  ]
                 }
               }
             }
             Solid {
               children [
                 Shape {
-                  appearance DEF bellows_link2_material PBRAppearance {
-                    baseColor 0.000000 0.000000 0.000000
-                    roughness 1.000000
+                  appearance PBRAppearance {
+                    baseColor 0 0 0
+                    roughness 1
                     metalness 0
                   }
                   geometry USE bellows_link
                 }
               ]
               name "bellows_link2"
-              boundingObject USE bellows_link_collision
+              boundingObject Box {
+                size 0.1 0.1 0.2
+              }
               physics Physics {
                 density -1
                 mass 0.169374
-                centerOfMass [ 0.019132 -0.000000 -0.134862 ]
-                inertiaMatrix [
-                  3.311591e-03 1.744473e-03 1.694176e-03
-                  -8.923096e-18 -5.386222e-08 -8.069650e-17
-                ]
               }
             }
           ]
           name "torso_lift_link"
-          boundingObject DEF torso_lift_link_collision Mesh {
-            url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/torso_lift_link_collision.STL"
+          boundingObject Box {
+            size 0.3 0.3 0.5
           }
           physics Physics {
             density -1
             mass 10.779600
-            centerOfMass [ -0.001300 -0.000900 0.293500 ]
-            inertiaMatrix [
-              3.354000e-01 3.354000e-01 9.540000e-02
-              0.000000e+00 -1.620000e-02 -6.000000e-04
-            ]
           }
         }
       }
       Solid {
         translation -0.124650 0.238920 0.311270
-        rotation 1.000000 0.000000 0.000000 1.570800
+        rotation 1 0 0 1.570800
         children [
           DEF estop_link_visual CadShape {
             url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/estop_link.dae"
           }
         ]
         name "estop_link"
-        boundingObject DEF estop_link Mesh {
-          url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/estop_link.STL"
+        boundingObject Cylinder {
+          radius 0.05
+          height 0.02
         }
         physics Physics {
           density -1
           mass 0.001961
-          centerOfMass [ 0.002435 -0.003306 0.006651 ]
-          inertiaMatrix [
-            3.028100e-07 2.933229e-07 2.285133e-07
-            -1.586202e-08 3.165614e-08 -4.288335e-08
-          ]
         }
       }
       Solid {
-        translation 0.235000 0.000000 0.287800
-        rotation 1.000000 0.000000 -0.000000 3.141593
+        translation 0.235000 0 0.287800
+        rotation 1 0 0 3.141593
         children [
           Shape {
-            appearance DEF laser_link_material PBRAppearance {
+            appearance PBRAppearance {
               baseColor 0.792157 0.819608 0.933333
-              roughness 1.000000
+              roughness 1
               metalness 0
             }
             geometry DEF laser_link Mesh {
@@ -760,51 +701,37 @@ PROTO fetch [
           }
         ]
         name "laser_link"
-        boundingObject USE laser_link
+        boundingObject Cylinder {
+          radius 0.05
+          height 0.02
+        }
         physics Physics {
           density -1
           mass 0.008336
-          centerOfMass [ -0.030623 0.000709 0.055197 ]
-          inertiaMatrix [
-            1.018665e-06 5.100396e-07 1.282707e-06
-            -5.884476e-08 7.838572e-08 -7.126643e-09
-          ]
         }
       }
       Solid {
-        translation -0.086875 0.000000 0.377425
+        translation -0.086875 0 0.377425
         children [
           DEF torso_fixed_link_visual CadShape {
             url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/torso_fixed_link.dae"
           }
         ]
         name "torso_fixed_link"
-        boundingObject DEF torso_fixed_link Mesh {
-          url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/torso_fixed_link.STL"
+        boundingObject Box {
+          size 0.3 0.3 0.4
         }
         physics Physics {
           density -1
-          mass 13.277500
-          centerOfMass [ -0.072200 0.005700 0.265600 ]
-          inertiaMatrix [
-            3.861000e-01 3.388000e-01 1.018000e-01
-            1.500000e-03 -1.020000e-02 1.170000e-02
-          ]
+          mass 10.277500
         }
       }
     ]
     name IS name
-    boundingObject DEF base_link_collision Mesh {
-      url "C:/Users/HP/Desktop/manual-anymal/fetch_description/meshes/base_link_collision.STL"
-    }
+    boundingObject USE base_link
     physics Physics {
       density -1
       mass 70.129400
-      centerOfMass [ -0.003600 0.000000 0.001400 ]
-      inertiaMatrix [
-        1.225000e+00 1.285300e+00 9.870000e-01
-        9.900000e-03 6.200000e-03 -3.400000e-03
-      ]
     }
   }
 }
