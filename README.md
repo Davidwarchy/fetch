@@ -75,6 +75,3 @@ python -m urdf2webots.importer --input=fetch_description/robots/fetch.urdf --out
   <img src="media/fetch_custom.gif" alt="Fetch Webots Demo" width="500"/>
 </p>
 
----
-
-Let me know if you want to add a section for ROS integration or arm control!
